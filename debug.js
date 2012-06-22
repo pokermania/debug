@@ -46,13 +46,29 @@ function debug(name) {
  */
 
 debug.cb_log = [];
+
+/**
+ * Registers a callback function and an optional object to apply to.
+ *
+ * @param {Function} fn
+ * @param {Object} bind
+ * @return {Object}
+ * @api public
+ */
+
 debug.cb_log.register = function(fn, bind){
-    var cb_log = new Object();
-    cb_log.fn = fn;
-    cb_log.bind = bind;
+    var cb_log = {fn: fn, bind: bind};
     this.push(cb_log);
     return cb_log;
 }
+
+/**
+ * Unregister a callback object.
+ *
+ * @param {Object} cb_log
+ * @api public
+ */
+
 debug.cb_log.unregister = function(cb_log){
     var idx = this.indexOf(cb_log);
     if(idx!=-1) this.splice(idx, 1);
