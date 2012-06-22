@@ -33,7 +33,29 @@ function debug(name) {
     window.console
       && console.log
       && Function.prototype.apply.call(console.log, console, arguments);
+
+    // Call back everything in debug.cb_log
+    for(var i = 0; i < debug.cb_log.length; i++) {
+        debug.cb_log[i].fn.apply(debug.cb_log[i].bind ? debug.cb_log[i].bind : window, arguments);
+    }
   }
+}
+
+/**
+ * Callbacks for logging
+ */
+
+debug.cb_log = [];
+debug.cb_log.register = function(fn, bind){
+    var cb_log = new Object();
+    cb_log.fn = fn;
+    cb_log.bind = bind;
+    this.push(cb_log);
+    return cb_log;
+}
+debug.cb_log.unregister = function(cb_log){
+    var idx = this.indexOf(cb_log);
+    if(idx!=-1) this.splice(idx, 1);
 }
 
 /**
